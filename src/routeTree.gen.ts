@@ -9,50 +9,186 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as WorkspaceRouteImport } from './routes/_workspace'
+import { Route as WorkspaceIndexRouteImport } from './routes/_workspace.index'
+import { Route as WorkspaceIntakeRouteImport } from './routes/_workspace.intake'
+import { Route as WorkspaceBatchesIndexRouteImport } from './routes/_workspace.batches.index'
+import { Route as WorkspaceBatchesBatchIdRouteImport } from './routes/_workspace.batches.$batchId'
+import { Route as WorkspaceDevicesIndexRouteImport } from './routes/_workspace.devices.index'
+import { Route as WorkspaceDevicesDeviceIdRouteImport } from './routes/_workspace.devices.$deviceId'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const WorkspaceRoute = WorkspaceRouteImport.update({
+  id: '/_workspace',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WorkspaceIndexRoute = WorkspaceIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => WorkspaceRoute,
+} as any)
+const WorkspaceIntakeRoute = WorkspaceIntakeRouteImport.update({
+  id: '/intake',
+  path: '/intake',
+  getParentRoute: () => WorkspaceRoute,
+} as any)
+const WorkspaceBatchesIndexRoute = WorkspaceBatchesIndexRouteImport.update({
+  id: '/batches/',
+  path: '/batches/',
+  getParentRoute: () => WorkspaceRoute,
+} as any)
+const WorkspaceBatchesBatchIdRoute = WorkspaceBatchesBatchIdRouteImport.update({
+  id: '/batches/$batchId',
+  path: '/batches/$batchId',
+  getParentRoute: () => WorkspaceRoute,
+} as any)
+const WorkspaceDevicesIndexRoute = WorkspaceDevicesIndexRouteImport.update({
+  id: '/devices/',
+  path: '/devices/',
+  getParentRoute: () => WorkspaceRoute,
+} as any)
+const WorkspaceDevicesDeviceIdRoute =
+  WorkspaceDevicesDeviceIdRouteImport.update({
+    id: '/devices/$deviceId',
+    path: '/devices/$deviceId',
+    getParentRoute: () => WorkspaceRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof WorkspaceIndexRoute
+  '/intake': typeof WorkspaceIntakeRoute
+  '/batches/$batchId': typeof WorkspaceBatchesBatchIdRoute
+  '/devices/$deviceId': typeof WorkspaceDevicesDeviceIdRoute
+  '/batches/': typeof WorkspaceBatchesIndexRoute
+  '/devices/': typeof WorkspaceDevicesIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/intake': typeof WorkspaceIntakeRoute
+  '/': typeof WorkspaceIndexRoute
+  '/batches/$batchId': typeof WorkspaceBatchesBatchIdRoute
+  '/devices/$deviceId': typeof WorkspaceDevicesDeviceIdRoute
+  '/batches': typeof WorkspaceBatchesIndexRoute
+  '/devices': typeof WorkspaceDevicesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_workspace': typeof WorkspaceRouteWithChildren
+  '/_workspace/intake': typeof WorkspaceIntakeRoute
+  '/_workspace/': typeof WorkspaceIndexRoute
+  '/_workspace/batches/$batchId': typeof WorkspaceBatchesBatchIdRoute
+  '/_workspace/devices/$deviceId': typeof WorkspaceDevicesDeviceIdRoute
+  '/_workspace/batches/': typeof WorkspaceBatchesIndexRoute
+  '/_workspace/devices/': typeof WorkspaceDevicesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/intake'
+    | '/batches/$batchId'
+    | '/devices/$deviceId'
+    | '/batches/'
+    | '/devices/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/intake'
+    | '/'
+    | '/batches/$batchId'
+    | '/devices/$deviceId'
+    | '/batches'
+    | '/devices'
+  id:
+    | '__root__'
+    | '/_workspace'
+    | '/_workspace/intake'
+    | '/_workspace/'
+    | '/_workspace/batches/$batchId'
+    | '/_workspace/devices/$deviceId'
+    | '/_workspace/batches/'
+    | '/_workspace/devices/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  WorkspaceRoute: typeof WorkspaceRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_workspace': {
+      id: '/_workspace'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof WorkspaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_workspace/': {
+      id: '/_workspace/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof WorkspaceIndexRouteImport
+      parentRoute: typeof WorkspaceRoute
+    }
+    '/_workspace/intake': {
+      id: '/_workspace/intake'
+      path: '/intake'
+      fullPath: '/intake'
+      preLoaderRoute: typeof WorkspaceIntakeRouteImport
+      parentRoute: typeof WorkspaceRoute
+    }
+    '/_workspace/batches/': {
+      id: '/_workspace/batches/'
+      path: '/batches'
+      fullPath: '/batches/'
+      preLoaderRoute: typeof WorkspaceBatchesIndexRouteImport
+      parentRoute: typeof WorkspaceRoute
+    }
+    '/_workspace/batches/$batchId': {
+      id: '/_workspace/batches/$batchId'
+      path: '/batches/$batchId'
+      fullPath: '/batches/$batchId'
+      preLoaderRoute: typeof WorkspaceBatchesBatchIdRouteImport
+      parentRoute: typeof WorkspaceRoute
+    }
+    '/_workspace/devices/': {
+      id: '/_workspace/devices/'
+      path: '/devices'
+      fullPath: '/devices/'
+      preLoaderRoute: typeof WorkspaceDevicesIndexRouteImport
+      parentRoute: typeof WorkspaceRoute
+    }
+    '/_workspace/devices/$deviceId': {
+      id: '/_workspace/devices/$deviceId'
+      path: '/devices/$deviceId'
+      fullPath: '/devices/$deviceId'
+      preLoaderRoute: typeof WorkspaceDevicesDeviceIdRouteImport
+      parentRoute: typeof WorkspaceRoute
     }
   }
 }
 
+interface WorkspaceRouteChildren {
+  WorkspaceIntakeRoute: typeof WorkspaceIntakeRoute
+  WorkspaceIndexRoute: typeof WorkspaceIndexRoute
+  WorkspaceBatchesBatchIdRoute: typeof WorkspaceBatchesBatchIdRoute
+  WorkspaceDevicesDeviceIdRoute: typeof WorkspaceDevicesDeviceIdRoute
+  WorkspaceBatchesIndexRoute: typeof WorkspaceBatchesIndexRoute
+  WorkspaceDevicesIndexRoute: typeof WorkspaceDevicesIndexRoute
+}
+
+const WorkspaceRouteChildren: WorkspaceRouteChildren = {
+  WorkspaceIntakeRoute: WorkspaceIntakeRoute,
+  WorkspaceIndexRoute: WorkspaceIndexRoute,
+  WorkspaceBatchesBatchIdRoute: WorkspaceBatchesBatchIdRoute,
+  WorkspaceDevicesDeviceIdRoute: WorkspaceDevicesDeviceIdRoute,
+  WorkspaceBatchesIndexRoute: WorkspaceBatchesIndexRoute,
+  WorkspaceDevicesIndexRoute: WorkspaceDevicesIndexRoute,
+}
+
+const WorkspaceRouteWithChildren = WorkspaceRoute._addFileChildren(
+  WorkspaceRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  WorkspaceRoute: WorkspaceRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
