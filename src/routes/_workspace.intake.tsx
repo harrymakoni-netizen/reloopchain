@@ -94,27 +94,27 @@ function IntakePage() {
   function validateStep(target: number) {
     const e: Record<string, string> = {};
     if (target > 1) {
-      if (!batchId) e.batchId = "Select the batch this item arrived in.";
-      if (!serial.trim()) e.serial = "A unique item serial is required.";
+      if (!batchId) e["batchId"] = "Select the batch this item arrived in.";
+      if (!serial.trim()) e["serial"] = "A unique item serial is required.";
       else if (
         state.devices.some(
           (d) => d.serial.toLowerCase() === serial.trim().toLowerCase(),
         )
       )
-        e.serial = "That serial is already registered.";
-      if (!make.trim()) e.make = "Manufacturer is required.";
+        e["serial"] = "That serial is already registered.";
+      if (!make.trim()) e["make"] = "Manufacturer is required.";
       if (!Number.isFinite(massValue) || massValue <= 0)
-        e.mass = "Measured mass must be greater than zero.";
-      else if (massValue > 500) e.mass = "Mass looks implausible — check the scale reading.";
+        e["mass"] = "Measured mass must be greater than zero.";
+      else if (massValue > 500) e["mass"] = "Mass looks implausible — check the scale reading.";
     }
     if (target > 2) {
       storage.forEach((row) => {
         if (!row.serial.trim()) e[`sto-${row.key}`] = "Storage serial is required.";
       });
-      if (test === "untested") e.test = "Record the functional test outcome before continuing.";
+      if (test === "untested") e["test"] = "Record the functional test outcome before continuing.";
     }
     if (target > 3) {
-      if (photos.length === 0) e.photos = "At least one evidence photo entry is required.";
+      if (photos.length === 0) e["photos"] = "At least one evidence photo entry is required.";
     }
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -307,7 +307,7 @@ function IntakePage() {
             <>
               <PanelHeader title="Identity and measured mass" />
               <div className="grid gap-4 px-5 py-5 md:grid-cols-2">
-                <Field label="Batch" htmlFor="i-batch" error={errors.batchId}>
+                <Field label="Batch" htmlFor="i-batch" error={errors["batchId"]}>
                   <select
                     id="i-batch"
                     className={selectCls}
@@ -326,7 +326,7 @@ function IntakePage() {
                   label="Item serial"
                   htmlFor="i-serial"
                   hint="Manufacturer serial or facility-assigned identifier."
-                  error={errors.serial}
+                  error={errors["serial"]}
                 >
                   <input
                     id="i-serial"
@@ -350,7 +350,7 @@ function IntakePage() {
                     ))}
                   </select>
                 </Field>
-                <Field label="Manufacturer" htmlFor="i-make" error={errors.make}>
+                <Field label="Manufacturer" htmlFor="i-make" error={errors["make"]}>
                   <input
                     id="i-make"
                     className={inputCls}
@@ -372,7 +372,7 @@ function IntakePage() {
                   label="Measured mass (kg)"
                   htmlFor="i-mass"
                   hint="Weighed at intake. Must be greater than zero."
-                  error={errors.mass}
+                  error={errors["mass"]}
                 >
                   <input
                     id="i-mass"
@@ -410,7 +410,7 @@ function IntakePage() {
                 description="Condition is derived from the functional test outcome you record here."
               />
               <div className="space-y-5 px-5 py-5">
-                <Field label="Functional test outcome" error={errors.test}>
+                <Field label="Functional test outcome" error={errors["test"]}>
                   <div className="flex flex-wrap gap-2">
                     {(["pass", "fail"] as FunctionalTest[]).map((t) => (
                       <button
@@ -586,7 +586,7 @@ function IntakePage() {
                 description="Photographs are recorded as evidence entries only; no image file is stored in this demonstration."
               />
               <div className="space-y-4 px-5 py-5">
-                <Field label="Evidence captured" error={errors.photos}>
+                <Field label="Evidence captured" error={errors["photos"]}>
                   <ul className="grid gap-2 sm:grid-cols-2">
                     {PHOTO_SLOTS.map((slot) => {
                       const on = photos.includes(slot);

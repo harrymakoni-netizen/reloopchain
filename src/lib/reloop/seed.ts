@@ -495,8 +495,8 @@ function buildDevice(spec: Spec, index: number): Device {
     storage,
     hazardFlags: spec.hazards ?? [],
     photos: [
-      { id: `pho-${index}-1`, label: "Asset label / serial plate", capturedAt: batch.collectedAt },
-      { id: `pho-${index}-2`, label: "Whole-unit condition", capturedAt: batch.collectedAt },
+      { id: `pho-${index}-1`, label: "Asset label / serial plate", capturedAt: batch.collectedAt, dataUrl: null },
+      { id: `pho-${index}-2`, label: "Whole-unit condition", capturedAt: batch.collectedAt, dataUrl: null },
     ],
     custodianId: FACILITY_ID,
     disposition: spec.disposition,
