@@ -125,7 +125,7 @@ function AssurancePage() {
         />
       </Panel>
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
         <Panel>
           <PanelHeader
             title="Storage register"

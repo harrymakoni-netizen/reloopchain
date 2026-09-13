@@ -101,7 +101,7 @@ function CustodyPage() {
         lede="Custody may pass only to a verified party with a current authorisation and the right hazard scope. Blocked transfers explain exactly why."
       />
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
+      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
         <Panel>
           <PanelHeader
             title={`Select items (${selected.length} selected)`}

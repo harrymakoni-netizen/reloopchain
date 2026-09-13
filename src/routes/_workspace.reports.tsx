@@ -167,7 +167,7 @@ function ReportsPage() {
           />
         </Panel>
 
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+        <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
           <Panel>
             <PanelHeader
               title={`Disposition detail — ${batch.ref}`}
@@ -204,9 +204,13 @@ function ReportsPage() {
                         </Status>
                       </Td>
                       <Td>
-                        <span className={isStale(d) ? "text-warn" : "text-muted-foreground"}>
-                          {shortDate(lastEvent(d)?.at ?? state.demoToday)} ·{" "}
-                          {ageLabel(lastEvent(d)?.at ?? state.demoToday)}
+                        <span
+                          className={`whitespace-nowrap ${isStale(d) ? "text-warn" : "text-muted-foreground"}`}
+                        >
+                          {shortDate(lastEvent(d)?.at ?? state.demoToday)}
+                          <span className="block text-[0.625rem]">
+                            {ageLabel(lastEvent(d)?.at ?? state.demoToday)}
+                          </span>
                         </span>
                       </Td>
                     </tr>
