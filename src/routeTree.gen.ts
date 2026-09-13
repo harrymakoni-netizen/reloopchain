@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WorkspaceRouteImport } from './routes/_workspace'
 import { Route as WorkspaceIndexRouteImport } from './routes/_workspace.index'
+import { Route as WorkspaceBatchesIndexRouteImport } from './routes/_workspace.batches.index'
 
 const WorkspaceRoute = WorkspaceRouteImport.update({
   id: '/_workspace',
@@ -21,24 +22,32 @@ const WorkspaceIndexRoute = WorkspaceIndexRouteImport.update({
   path: '/',
   getParentRoute: () => WorkspaceRoute,
 } as any)
+const WorkspaceBatchesIndexRoute = WorkspaceBatchesIndexRouteImport.update({
+  id: '/batches/',
+  path: '/batches/',
+  getParentRoute: () => WorkspaceRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof WorkspaceIndexRoute
+  '/batches/': typeof WorkspaceBatchesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof WorkspaceIndexRoute
+  '/batches': typeof WorkspaceBatchesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_workspace': typeof WorkspaceRouteWithChildren
   '/_workspace/': typeof WorkspaceIndexRoute
+  '/_workspace/batches/': typeof WorkspaceBatchesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/batches/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/_workspace' | '/_workspace/'
+  to: '/' | '/batches'
+  id: '__root__' | '/_workspace' | '/_workspace/' | '/_workspace/batches/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -61,15 +70,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkspaceIndexRouteImport
       parentRoute: typeof WorkspaceRoute
     }
+    '/_workspace/batches/': {
+      id: '/_workspace/batches/'
+      path: '/batches'
+      fullPath: '/batches/'
+      preLoaderRoute: typeof WorkspaceBatchesIndexRouteImport
+      parentRoute: typeof WorkspaceRoute
+    }
   }
 }
 
 interface WorkspaceRouteChildren {
   WorkspaceIndexRoute: typeof WorkspaceIndexRoute
+  WorkspaceBatchesIndexRoute: typeof WorkspaceBatchesIndexRoute
 }
 
 const WorkspaceRouteChildren: WorkspaceRouteChildren = {
   WorkspaceIndexRoute: WorkspaceIndexRoute,
+  WorkspaceBatchesIndexRoute: WorkspaceBatchesIndexRoute,
 }
 
 const WorkspaceRouteWithChildren = WorkspaceRoute._addFileChildren(
