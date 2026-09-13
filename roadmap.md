@@ -1,16 +1,18 @@
 # ReLoop build roadmap
 
+All tasks complete.
+
 - [x] Design system, brand tokens, logo clipping, favicon
-- [x] Data model, seeded demo data, localStorage store
+- [x] Data model, seeded demo data, localStorage store (v4)
 - [x] Overview, Batches (+detail/reconciliation/CSV), Devices (+passport), Intake
-- [ ] Custody (initiate / accept / blocked routing)
-- [ ] Data assurance (sanitisation + destruction records)
-- [ ] Recovery estimates (assumptions, hazard overview)
-- [ ] Handler network
-- [ ] Reports (CSV, print report, certificate specimen gating)
-- [ ] Settings & help (guided walkthrough, reset sample data)
-- [ ] Public passport route /p/$serial
-- [ ] Real evidence photo upload + persistence (data URLs in local storage)
-- [ ] Fix all TS/build errors
-- [ ] Browser checks: desktop + mobile, intake→passport, valid/blocked custody,
-      assurance gating, reports
+- [x] Custody (initiate / accept / blocked routing)
+- [x] Data assurance (sanitisation + destruction records, witness rule)
+- [x] Recovery estimates (assumptions, basis drawer, hazard overview)
+- [x] Handler network
+- [x] Reports (CSV, print report, certificate specimen gating)
+- [x] Settings & help (guided walkthrough, reset sample data, honest limits)
+- [x] Public passport route /p/$serial
+- [x] Real evidence photo upload + persistence
+- [x] Typecheck clean
+- [x] Browser checks: desktop + mobile, intake -> passport, valid/blocked custody,
+      assurance gating, certificate gating, CSV download
