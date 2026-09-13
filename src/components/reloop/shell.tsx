@@ -85,9 +85,6 @@ function SidebarInner({ onNavigate }: { onNavigate?: (() => void) | undefined })
         <LogoMark size={32} />
         <div className="leading-tight">
           <p className="text-sm font-semibold text-sidebar-accent-foreground">ReLoop</p>
-          <p className="text-[0.625rem] uppercase tracking-[0.12em] text-sidebar-foreground/50">
-            HJM Technologies
-          </p>
         </div>
       </div>
       <div className="flex-1 overflow-y-auto px-2 py-5">
