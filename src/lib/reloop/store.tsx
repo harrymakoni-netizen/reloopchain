@@ -19,7 +19,7 @@ import type {
   Transfer,
 } from "./types";
 
-const STORAGE_KEY = "reloop.demo.state.v3";
+const STORAGE_KEY = "reloop.demo.state.v4";
 
 interface Ctx {
   state: ReloopState;
