@@ -27,6 +27,7 @@ import {
   storageResolved,
   usd,
 } from "@/lib/reloop/format";
+import { fileToEvidenceDataUrl } from "@/lib/reloop/image";
 import { ESTIMATE_DISCLAIMER, estimateForMass } from "@/lib/reloop/recovery";
 import { useReloop } from "@/lib/reloop/store";
 import type { Disposition } from "@/lib/reloop/types";
