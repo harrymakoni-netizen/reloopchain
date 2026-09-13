@@ -604,6 +604,20 @@ function IntakePage() {
                     {PHOTO_SLOTS.map((slot) => {
                       const existing = photos.find((p) => p.label === slot);
                       const inputId = `photo-${slot.replace(/[^a-z]/gi, "")}`;
+                      const cameraId = `camera-${slot.replace(/[^a-z]/gi, "")}`;
+                      const readFile = async (file: File | undefined) => {
+                        if (!file) return;
+                        try {
+                          const dataUrl = await fileToEvidenceDataUrl(file);
+                          setPhotos((prev) => [
+                            ...prev.filter((p) => p.label !== slot),
+                            { key: uid("pho"), label: slot, dataUrl },
+                          ]);
+                          toast.success(`${slot} photograph attached.`);
+                        } catch {
+                          toast.error("That file could not be read as an image.");
+                        }
+                      };
                       return (
                         <li
                           key={slot}
