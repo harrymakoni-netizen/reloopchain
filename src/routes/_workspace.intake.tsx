@@ -582,36 +582,83 @@ function IntakePage() {
           {step === 3 ? (
             <>
               <PanelHeader
-                title="Evidence"
-                description="Photographs are recorded as evidence entries only; no image file is stored in this demonstration."
+                title="Evidence photographs"
+                description="Attach a photograph for each evidence slot. Images are downscaled and stored with the item record in this browser."
               />
               <div className="space-y-4 px-5 py-5">
                 <Field label="Evidence captured" error={errors["photos"]}>
-                  <ul className="grid gap-2 sm:grid-cols-2">
+                  <ul className="grid gap-3 sm:grid-cols-2">
                     {PHOTO_SLOTS.map((slot) => {
-                      const on = photos.includes(slot);
+                      const existing = photos.find((p) => p.label === slot);
+                      const inputId = `photo-${slot.replace(/[^a-z]/gi, "")}`;
                       return (
-                        <li key={slot}>
-                          <label className="flex cursor-pointer items-center gap-2 rounded-sm border border-border px-3 py-2.5 text-xs hover:bg-secondary">
-                            <input
-                              type="checkbox"
-                              checked={on}
-                              onChange={() =>
-                                setPhotos((prev) =>
-                                  on ? prev.filter((p) => p !== slot) : [...prev, slot],
-                                )
-                              }
+                        <li
+                          key={slot}
+                          className="rounded-sm border border-border p-3 text-xs"
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <span className="font-medium">{slot}</span>
+                            {existing ? (
+                              <Status tone="ok">attached</Status>
+                            ) : (
+                              <Status tone="muted">not captured</Status>
+                            )}
+                          </div>
+                          {existing?.dataUrl ? (
+                            <img
+                              src={existing.dataUrl}
+                              alt={`Evidence photograph: ${slot}`}
+                              className="mt-2 h-28 w-full rounded-sm border border-border object-cover"
                             />
-                            {slot}
-                          </label>
+                          ) : null}
+                          <div className="mt-2 flex flex-wrap items-center gap-2">
+                            <label
+                              htmlFor={inputId}
+                              className={`${btnGhost} cursor-pointer`}
+                            >
+                              {existing ? "Replace photo" : "Attach photo"}
+                            </label>
+                            <input
+                              id={inputId}
+                              type="file"
+                              accept="image/*"
+                              className="sr-only"
+                              onChange={async (e) => {
+                                const file = e.target.files?.[0];
+                                e.target.value = "";
+                                if (!file) return;
+                                try {
+                                  const dataUrl = await fileToEvidenceDataUrl(file);
+                                  setPhotos((prev) => [
+                                    ...prev.filter((p) => p.label !== slot),
+                                    { key: uid("pho"), label: slot, dataUrl },
+                                  ]);
+                                  toast.success(`${slot} photograph attached.`);
+                                } catch {
+                                  toast.error("That file could not be read as an image.");
+                                }
+                              }}
+                            />
+                            {existing ? (
+                              <button
+                                type="button"
+                                className={btnGhost}
+                                onClick={() =>
+                                  setPhotos((prev) => prev.filter((p) => p.label !== slot))
+                                }
+                              >
+                                Remove
+                              </button>
+                            ) : null}
+                          </div>
                         </li>
                       );
                     })}
                   </ul>
                 </Field>
                 <Note tone="muted">
-                  Evidence entries support the disposal record. They are not proof of data
-                  destruction — that is recorded separately under Data assurance.
+                  Evidence photographs support the disposal record. They are not proof of
+                  data destruction — that is recorded separately under Data assurance.
                 </Note>
               </div>
             </>
