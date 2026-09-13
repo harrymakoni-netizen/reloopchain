@@ -192,3 +192,21 @@
     background: #fff;
   }
 }
+
+.print-only {
+  display: none;
+}
+
+@media print {
+  .print-only {
+    display: block !important;
+  }
+  .print-hidden {
+    display: none !important;
+  }
+  .print-page {
+    position: absolute;
+    inset: 0;
+    padding: 0;
+  }
+}

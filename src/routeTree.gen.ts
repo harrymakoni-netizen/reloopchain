@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as WorkspaceRouteImport } from './routes/_workspace'
 import { Route as WorkspaceIndexRouteImport } from './routes/_workspace.index'
 import { Route as WorkspaceBatchesIndexRouteImport } from './routes/_workspace.batches.index'
+import { Route as WorkspaceDevicesIndexRouteImport } from './routes/_workspace.devices.index'
 
 const WorkspaceRoute = WorkspaceRouteImport.update({
   id: '/_workspace',
@@ -27,27 +28,40 @@ const WorkspaceBatchesIndexRoute = WorkspaceBatchesIndexRouteImport.update({
   path: '/batches/',
   getParentRoute: () => WorkspaceRoute,
 } as any)
+const WorkspaceDevicesIndexRoute = WorkspaceDevicesIndexRouteImport.update({
+  id: '/devices/',
+  path: '/devices/',
+  getParentRoute: () => WorkspaceRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof WorkspaceIndexRoute
   '/batches/': typeof WorkspaceBatchesIndexRoute
+  '/devices/': typeof WorkspaceDevicesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof WorkspaceIndexRoute
   '/batches': typeof WorkspaceBatchesIndexRoute
+  '/devices': typeof WorkspaceDevicesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_workspace': typeof WorkspaceRouteWithChildren
   '/_workspace/': typeof WorkspaceIndexRoute
   '/_workspace/batches/': typeof WorkspaceBatchesIndexRoute
+  '/_workspace/devices/': typeof WorkspaceDevicesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/batches/'
+  fullPaths: '/' | '/batches/' | '/devices/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/batches'
-  id: '__root__' | '/_workspace' | '/_workspace/' | '/_workspace/batches/'
+  to: '/' | '/batches' | '/devices'
+  id:
+    | '__root__'
+    | '/_workspace'
+    | '/_workspace/'
+    | '/_workspace/batches/'
+    | '/_workspace/devices/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,17 +91,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkspaceBatchesIndexRouteImport
       parentRoute: typeof WorkspaceRoute
     }
+    '/_workspace/devices/': {
+      id: '/_workspace/devices/'
+      path: '/devices'
+      fullPath: '/devices/'
+      preLoaderRoute: typeof WorkspaceDevicesIndexRouteImport
+      parentRoute: typeof WorkspaceRoute
+    }
   }
 }
 
 interface WorkspaceRouteChildren {
   WorkspaceIndexRoute: typeof WorkspaceIndexRoute
   WorkspaceBatchesIndexRoute: typeof WorkspaceBatchesIndexRoute
+  WorkspaceDevicesIndexRoute: typeof WorkspaceDevicesIndexRoute
 }
 
 const WorkspaceRouteChildren: WorkspaceRouteChildren = {
   WorkspaceIndexRoute: WorkspaceIndexRoute,
   WorkspaceBatchesIndexRoute: WorkspaceBatchesIndexRoute,
+  WorkspaceDevicesIndexRoute: WorkspaceDevicesIndexRoute,
 }
 
 const WorkspaceRouteWithChildren = WorkspaceRoute._addFileChildren(
