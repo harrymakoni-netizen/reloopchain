@@ -37,10 +37,11 @@ export function ageLabel(iso: string) {
 }
 
 export function lastEvent(device: Device) {
-  return device.events.reduce(
-    (latest, e) => (e.at > latest.at ? e : latest),
-    device.events[0],
-  );
+  let latest = device.events[0];
+  for (const e of device.events) {
+    if (!latest || e.at > latest.at) latest = e;
+  }
+  return latest;
 }
 
 export function isStale(device: Device) {
