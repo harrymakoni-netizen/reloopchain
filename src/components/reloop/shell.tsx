@@ -38,7 +38,7 @@ const ROLE_LABEL: Record<DemoRole, string> = {
   handler: "Receiving handler",
 };
 
-function NavList({ onNavigate }: { onNavigate?: () => void }) {
+function NavList({ onNavigate }: { onNavigate?: (() => void) | undefined }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   return (
     <nav className="space-y-6" aria-label="Workspace sections">
@@ -78,7 +78,7 @@ function NavList({ onNavigate }: { onNavigate?: () => void }) {
   );
 }
 
-function SidebarInner({ onNavigate }: { onNavigate?: () => void }) {
+function SidebarInner({ onNavigate }: { onNavigate?: (() => void) | undefined }) {
   return (
     <div className="flex h-full flex-col bg-sidebar">
       <div className="flex items-center gap-2.5 border-b border-sidebar-border px-4 py-3.5">
