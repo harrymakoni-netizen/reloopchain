@@ -392,8 +392,8 @@ const specs: Spec[] = [
   {
     serial: "RLP-HRE18-002", category: "Laptop", make: "Dell", model: "Latitude 5410",
     massKg: 1.79, test: "pass", batchId: "bat-hre-018", assetTag: "KWB-5502",
-    storage: [["NVMe", "N-WD-7718QA", 512, null]],
-    disposition: "awaiting", condition: "Functional; storage device not yet processed.",
+    storage: [["NVMe", "N-WD-7718QA", 512, san("san-18", "overwrite-purge", "T. Moyo", "2026-09-12", "verified", null, "Purge completed at bench 2; verification log exported.")]],
+    disposition: "awaiting", condition: "Functional; awaiting institutional reuse decision.",
     lastEventAt: "2026-09-10",
   },
   {
@@ -426,7 +426,7 @@ const specs: Spec[] = [
     serial: "RLP-HRE18-006", category: "Mobile handset", make: "Samsung", model: "Galaxy A12",
     massKg: 0.2, test: "fail", batchId: "bat-hre-018", assetTag: "KWB-7702",
     hazards: ["lithium-cell"],
-    storage: [["eMMC", "E-SM-A12-8849", 64, null]],
+    storage: [["eMMC", "E-SM-A12-8849", 64, san("san-19", "physical-destruction", "R. Chigumba", "2026-09-12", "verified", null, "Board punched and shredded; fragments in sealed bag 09-12-C.", "T. Moyo")]],
     disposition: "awaiting", condition: "Water ingress; will not charge.",
     lastEventAt: "2026-09-12",
   },
