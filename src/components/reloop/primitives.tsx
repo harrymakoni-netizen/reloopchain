@@ -6,7 +6,7 @@ export function Panel({
   className,
 }: {
   children: ReactNode;
-  className?: string;
+  className?: string | undefined;
 }) {
   return <section className={cn("panel", className)}>{children}</section>;
 }
@@ -18,9 +18,9 @@ export function PanelHeader({
   className,
 }: {
   title: ReactNode;
-  description?: ReactNode;
-  actions?: ReactNode;
-  className?: string;
+  description?: ReactNode | undefined;
+  actions?: ReactNode | undefined;
+  className?: string | undefined;
 }) {
   return (
     <header
@@ -46,10 +46,10 @@ export function PageHeading({
   lede,
   actions,
 }: {
-  eyebrow?: string;
+  eyebrow?: string | undefined;
   title: string;
-  lede?: ReactNode;
-  actions?: ReactNode;
+  lede?: ReactNode | undefined;
+  actions?: ReactNode | undefined;
 }) {
   return (
     <div className="flex flex-wrap items-end justify-between gap-4 pb-6">
@@ -75,8 +75,8 @@ export function Metric({
 }: {
   label: string;
   value: ReactNode;
-  sub?: ReactNode;
-  tone?: "default" | "warn" | "ok";
+  sub?: ReactNode | undefined;
+  tone?: "default" | "warn" | "ok" | undefined;
 }) {
   return (
     <div className="flex flex-col justify-between border-border px-5 py-4">
@@ -112,8 +112,8 @@ export function Status({
   dot = true,
 }: {
   children: ReactNode;
-  tone?: Tone;
-  dot?: boolean;
+  tone?: Tone | undefined;
+  dot?: boolean | undefined;
 }) {
   return (
     <span
@@ -136,10 +136,10 @@ export function Field({
   error,
 }: {
   label: string;
-  hint?: string;
-  htmlFor?: string;
+  hint?: string | undefined;
+  htmlFor?: string | undefined;
   children: ReactNode;
-  error?: string;
+  error?: string | undefined;
 }) {
   return (
     <div className="space-y-1.5">
@@ -164,7 +164,7 @@ export function Note({
   tone = "muted",
 }: {
   children: ReactNode;
-  tone?: Tone;
+  tone?: Tone | undefined;
 }) {
   return (
     <p
@@ -185,7 +185,7 @@ export function EmptyState({
 }: {
   title: string;
   body: string;
-  action?: ReactNode;
+  action?: ReactNode | undefined;
 }) {
   return (
     <div className="px-5 py-12 text-center">
@@ -211,9 +211,9 @@ export function Th({
   align = "left",
   className,
 }: {
-  children?: ReactNode;
-  align?: "left" | "right";
-  className?: string;
+  children?: ReactNode | undefined;
+  align?: "left" | "right" | undefined;
+  className?: string | undefined;
 }) {
   return (
     <th
@@ -234,9 +234,9 @@ export function Td({
   align = "left",
   className,
 }: {
-  children?: ReactNode;
-  align?: "left" | "right";
-  className?: string;
+  children?: ReactNode | undefined;
+  align?: "left" | "right" | undefined;
+  className?: string | undefined;
 }) {
   return (
     <td

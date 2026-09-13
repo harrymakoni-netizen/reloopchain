@@ -13,8 +13,8 @@ export function LogoMark({
   size = 34,
   className,
 }: {
-  size?: number;
-  className?: string;
+  size?: number | undefined;
+  className?: string | undefined;
 }) {
   const scale = size / 400; // crop width 400px of source
   return (
@@ -47,9 +47,9 @@ export function LogoLockup({
   className,
   label = "ReLoop by HJM Technologies",
 }: {
-  width?: number;
-  className?: string;
-  label?: string;
+  width?: number | undefined;
+  className?: string | undefined;
+  label?: string | undefined;
 }) {
   const cropW = 1250;
   const cropH = 420;
