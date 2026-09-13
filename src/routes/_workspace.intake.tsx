@@ -653,17 +653,25 @@ function IntakePage() {
                               onChange={async (e) => {
                                 const file = e.target.files?.[0];
                                 e.target.value = "";
-                                if (!file) return;
-                                try {
-                                  const dataUrl = await fileToEvidenceDataUrl(file);
-                                  setPhotos((prev) => [
-                                    ...prev.filter((p) => p.label !== slot),
-                                    { key: uid("pho"), label: slot, dataUrl },
-                                  ]);
-                                  toast.success(`${slot} photograph attached.`);
-                                } catch {
-                                  toast.error("That file could not be read as an image.");
-                                }
+                                await readFile(file);
+                              }}
+                            />
+                            <label
+                              htmlFor={cameraId}
+                              className={`${btnGhost} cursor-pointer`}
+                            >
+                              {existing ? "Retake photo" : "Take photo"}
+                            </label>
+                            <input
+                              id={cameraId}
+                              type="file"
+                              accept="image/*"
+                              capture="environment"
+                              className="sr-only"
+                              onChange={async (e) => {
+                                const file = e.target.files?.[0];
+                                e.target.value = "";
+                                await readFile(file);
                               }}
                             />
                             {existing ? (
