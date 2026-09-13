@@ -15,7 +15,7 @@ import type {
 } from "./types";
 
 export const DEMO_TODAY = "2026-09-13";
-export const STATE_VERSION = 3;
+export const STATE_VERSION = 4;
 
 export const FACILITY_ID = "hnd-reloop-central";
 
