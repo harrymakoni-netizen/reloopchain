@@ -139,14 +139,6 @@ export function AppShell({ children }: { children: ReactNode }) {
           >
             Menu
           </button>
-          <span className="hidden items-center gap-2 text-xs text-muted-foreground sm:flex">
-            <span className="inline-flex items-center gap-1.5 rounded-sm border border-warn/35 bg-warn/8 px-2 py-0.5 font-medium text-warn">
-              Expo demo · sample data
-            </span>
-            <span className="hidden md:inline">
-              POTRAZ Innovation Expo · ZIEC Bulawayo · 29 Sep – 2 Oct 2026
-            </span>
-          </span>
           <div className="ml-auto flex items-center gap-2">
             <label htmlFor="demo-role" className="text-[0.6875rem] text-muted-foreground">
               Demo role (display only — not authentication)
