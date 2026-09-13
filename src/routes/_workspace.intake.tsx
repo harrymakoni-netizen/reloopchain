@@ -14,6 +14,7 @@ import {
 import { QrCode } from "@/components/reloop/qr";
 import { btnGhost, btnPrimary, inputCls, selectCls } from "@/components/reloop/controls";
 import { HAZARD_LABEL, kg } from "@/lib/reloop/format";
+import { fileToEvidenceDataUrl } from "@/lib/reloop/image";
 import { FACILITY_ID, useReloop, uid } from "@/lib/reloop/store";
 import type {
   DeviceCategory,
@@ -62,6 +63,12 @@ const PHOTO_SLOTS = [
   "Hazard or damage detail",
 ];
 
+interface PhotoDraft {
+  key: string;
+  label: string;
+  dataUrl: string;
+}
+
 interface StorageRow {
   key: string;
   serial: string;
@@ -86,7 +93,7 @@ function IntakePage() {
   const [condition, setCondition] = useState("");
   const [storage, setStorage] = useState<StorageRow[]>([]);
   const [hazards, setHazards] = useState<HazardFlag[]>([]);
-  const [photos, setPhotos] = useState<string[]>([PHOTO_SLOTS[0]!, PHOTO_SLOTS[1]!]);
+  const [photos, setPhotos] = useState<PhotoDraft[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const massValue = Number.parseFloat(mass);
@@ -94,27 +101,28 @@ function IntakePage() {
   function validateStep(target: number) {
     const e: Record<string, string> = {};
     if (target > 1) {
-      if (!batchId) e.batchId = "Select the batch this item arrived in.";
-      if (!serial.trim()) e.serial = "A unique item serial is required.";
+      if (!batchId) e["batchId"] = "Select the batch this item arrived in.";
+      if (!serial.trim()) e["serial"] = "A unique item serial is required.";
       else if (
         state.devices.some(
           (d) => d.serial.toLowerCase() === serial.trim().toLowerCase(),
         )
       )
-        e.serial = "That serial is already registered.";
-      if (!make.trim()) e.make = "Manufacturer is required.";
+        e["serial"] = "That serial is already registered.";
+      if (!make.trim()) e["make"] = "Manufacturer is required.";
       if (!Number.isFinite(massValue) || massValue <= 0)
-        e.mass = "Measured mass must be greater than zero.";
-      else if (massValue > 500) e.mass = "Mass looks implausible — check the scale reading.";
+        e["mass"] = "Measured mass must be greater than zero.";
+      else if (massValue > 500) e["mass"] = "Mass looks implausible — check the scale reading.";
     }
     if (target > 2) {
       storage.forEach((row) => {
         if (!row.serial.trim()) e[`sto-${row.key}`] = "Storage serial is required.";
       });
-      if (test === "untested") e.test = "Record the functional test outcome before continuing.";
+      if (test === "untested") e["test"] = "Record the functional test outcome before continuing.";
     }
     if (target > 3) {
-      if (photos.length === 0) e.photos = "At least one evidence photo entry is required.";
+      if (photos.length === 0)
+        e["photos"] = "Attach at least one evidence photograph.";
     }
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -156,7 +164,12 @@ function IntakePage() {
         record: null,
       })),
       hazardFlags: hazards,
-      photos: photos.map((label) => ({ id: uid("pho"), label, capturedAt: now })),
+      photos: photos.map((p) => ({
+        id: uid("pho"),
+        label: p.label,
+        capturedAt: now,
+        dataUrl: p.dataUrl,
+      })),
       custodianId: FACILITY_ID,
       disposition: "awaiting",
       recoveredFractions: [],
@@ -195,7 +208,7 @@ function IntakePage() {
     setCondition("");
     setStorage([]);
     setHazards([]);
-    setPhotos([PHOTO_SLOTS[0]!, PHOTO_SLOTS[1]!]);
+    setPhotos([]);
     setErrors({});
   }
 
@@ -307,7 +320,7 @@ function IntakePage() {
             <>
               <PanelHeader title="Identity and measured mass" />
               <div className="grid gap-4 px-5 py-5 md:grid-cols-2">
-                <Field label="Batch" htmlFor="i-batch" error={errors.batchId}>
+                <Field label="Batch" htmlFor="i-batch" error={errors["batchId"]}>
                   <select
                     id="i-batch"
                     className={selectCls}
@@ -326,7 +339,7 @@ function IntakePage() {
                   label="Item serial"
                   htmlFor="i-serial"
                   hint="Manufacturer serial or facility-assigned identifier."
-                  error={errors.serial}
+                  error={errors["serial"]}
                 >
                   <input
                     id="i-serial"
@@ -350,7 +363,7 @@ function IntakePage() {
                     ))}
                   </select>
                 </Field>
-                <Field label="Manufacturer" htmlFor="i-make" error={errors.make}>
+                <Field label="Manufacturer" htmlFor="i-make" error={errors["make"]}>
                   <input
                     id="i-make"
                     className={inputCls}
@@ -372,7 +385,7 @@ function IntakePage() {
                   label="Measured mass (kg)"
                   htmlFor="i-mass"
                   hint="Weighed at intake. Must be greater than zero."
-                  error={errors.mass}
+                  error={errors["mass"]}
                 >
                   <input
                     id="i-mass"
@@ -410,7 +423,7 @@ function IntakePage() {
                 description="Condition is derived from the functional test outcome you record here."
               />
               <div className="space-y-5 px-5 py-5">
-                <Field label="Functional test outcome" error={errors.test}>
+                <Field label="Functional test outcome" error={errors["test"]}>
                   <div className="flex flex-wrap gap-2">
                     {(["pass", "fail"] as FunctionalTest[]).map((t) => (
                       <button
@@ -582,36 +595,83 @@ function IntakePage() {
           {step === 3 ? (
             <>
               <PanelHeader
-                title="Evidence"
-                description="Photographs are recorded as evidence entries only; no image file is stored in this demonstration."
+                title="Evidence photographs"
+                description="Attach a photograph for each evidence slot. Images are downscaled and stored with the item record in this browser."
               />
               <div className="space-y-4 px-5 py-5">
-                <Field label="Evidence captured" error={errors.photos}>
-                  <ul className="grid gap-2 sm:grid-cols-2">
+                <Field label="Evidence captured" error={errors["photos"]}>
+                  <ul className="grid gap-3 sm:grid-cols-2">
                     {PHOTO_SLOTS.map((slot) => {
-                      const on = photos.includes(slot);
+                      const existing = photos.find((p) => p.label === slot);
+                      const inputId = `photo-${slot.replace(/[^a-z]/gi, "")}`;
                       return (
-                        <li key={slot}>
-                          <label className="flex cursor-pointer items-center gap-2 rounded-sm border border-border px-3 py-2.5 text-xs hover:bg-secondary">
-                            <input
-                              type="checkbox"
-                              checked={on}
-                              onChange={() =>
-                                setPhotos((prev) =>
-                                  on ? prev.filter((p) => p !== slot) : [...prev, slot],
-                                )
-                              }
+                        <li
+                          key={slot}
+                          className="rounded-sm border border-border p-3 text-xs"
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <span className="font-medium">{slot}</span>
+                            {existing ? (
+                              <Status tone="ok">attached</Status>
+                            ) : (
+                              <Status tone="muted">not captured</Status>
+                            )}
+                          </div>
+                          {existing?.dataUrl ? (
+                            <img
+                              src={existing.dataUrl}
+                              alt={`Evidence photograph: ${slot}`}
+                              className="mt-2 h-28 w-full rounded-sm border border-border object-cover"
                             />
-                            {slot}
-                          </label>
+                          ) : null}
+                          <div className="mt-2 flex flex-wrap items-center gap-2">
+                            <label
+                              htmlFor={inputId}
+                              className={`${btnGhost} cursor-pointer`}
+                            >
+                              {existing ? "Replace photo" : "Attach photo"}
+                            </label>
+                            <input
+                              id={inputId}
+                              type="file"
+                              accept="image/*"
+                              className="sr-only"
+                              onChange={async (e) => {
+                                const file = e.target.files?.[0];
+                                e.target.value = "";
+                                if (!file) return;
+                                try {
+                                  const dataUrl = await fileToEvidenceDataUrl(file);
+                                  setPhotos((prev) => [
+                                    ...prev.filter((p) => p.label !== slot),
+                                    { key: uid("pho"), label: slot, dataUrl },
+                                  ]);
+                                  toast.success(`${slot} photograph attached.`);
+                                } catch {
+                                  toast.error("That file could not be read as an image.");
+                                }
+                              }}
+                            />
+                            {existing ? (
+                              <button
+                                type="button"
+                                className={btnGhost}
+                                onClick={() =>
+                                  setPhotos((prev) => prev.filter((p) => p.label !== slot))
+                                }
+                              >
+                                Remove
+                              </button>
+                            ) : null}
+                          </div>
                         </li>
                       );
                     })}
                   </ul>
                 </Field>
                 <Note tone="muted">
-                  Evidence entries support the disposal record. They are not proof of data
-                  destruction — that is recorded separately under Data assurance.
+                  Evidence photographs support the disposal record. They are not proof of
+                  data destruction — that is recorded separately under Data assurance.
                 </Note>
               </div>
             </>
@@ -644,7 +704,12 @@ function IntakePage() {
                       ? "None"
                       : hazards.map((h) => HAZARD_LABEL[h]).join(", "),
                   ],
-                  ["Evidence", photos.join(", ") || "None"],
+                  [
+                    "Evidence",
+                    photos.length === 0
+                      ? "None attached"
+                      : photos.map((p) => p.label).join(", "),
+                  ],
                 ].map(([k, v]) => (
                   <div
                     key={k}

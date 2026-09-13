@@ -11,7 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WorkspaceRouteImport } from './routes/_workspace'
 import { Route as WorkspaceIndexRouteImport } from './routes/_workspace.index'
+import { Route as WorkspaceAssuranceRouteImport } from './routes/_workspace.assurance'
+import { Route as WorkspaceCustodyRouteImport } from './routes/_workspace.custody'
+import { Route as WorkspaceHandlersRouteImport } from './routes/_workspace.handlers'
 import { Route as WorkspaceIntakeRouteImport } from './routes/_workspace.intake'
+import { Route as WorkspaceRecoveryRouteImport } from './routes/_workspace.recovery'
+import { Route as WorkspaceReportsRouteImport } from './routes/_workspace.reports'
+import { Route as WorkspaceSettingsRouteImport } from './routes/_workspace.settings'
+import { Route as PSerialRouteImport } from './routes/p.$serial'
 import { Route as WorkspaceBatchesIndexRouteImport } from './routes/_workspace.batches.index'
 import { Route as WorkspaceBatchesBatchIdRouteImport } from './routes/_workspace.batches.$batchId'
 import { Route as WorkspaceDevicesIndexRouteImport } from './routes/_workspace.devices.index'
@@ -26,10 +33,45 @@ const WorkspaceIndexRoute = WorkspaceIndexRouteImport.update({
   path: '/',
   getParentRoute: () => WorkspaceRoute,
 } as any)
+const WorkspaceAssuranceRoute = WorkspaceAssuranceRouteImport.update({
+  id: '/assurance',
+  path: '/assurance',
+  getParentRoute: () => WorkspaceRoute,
+} as any)
+const WorkspaceCustodyRoute = WorkspaceCustodyRouteImport.update({
+  id: '/custody',
+  path: '/custody',
+  getParentRoute: () => WorkspaceRoute,
+} as any)
+const WorkspaceHandlersRoute = WorkspaceHandlersRouteImport.update({
+  id: '/handlers',
+  path: '/handlers',
+  getParentRoute: () => WorkspaceRoute,
+} as any)
 const WorkspaceIntakeRoute = WorkspaceIntakeRouteImport.update({
   id: '/intake',
   path: '/intake',
   getParentRoute: () => WorkspaceRoute,
+} as any)
+const WorkspaceRecoveryRoute = WorkspaceRecoveryRouteImport.update({
+  id: '/recovery',
+  path: '/recovery',
+  getParentRoute: () => WorkspaceRoute,
+} as any)
+const WorkspaceReportsRoute = WorkspaceReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => WorkspaceRoute,
+} as any)
+const WorkspaceSettingsRoute = WorkspaceSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => WorkspaceRoute,
+} as any)
+const PSerialRoute = PSerialRouteImport.update({
+  id: '/p/$serial',
+  path: '/p/$serial',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const WorkspaceBatchesIndexRoute = WorkspaceBatchesIndexRouteImport.update({
   id: '/batches/',
@@ -55,14 +97,28 @@ const WorkspaceDevicesDeviceIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof WorkspaceIndexRoute
+  '/assurance': typeof WorkspaceAssuranceRoute
+  '/custody': typeof WorkspaceCustodyRoute
+  '/handlers': typeof WorkspaceHandlersRoute
   '/intake': typeof WorkspaceIntakeRoute
+  '/recovery': typeof WorkspaceRecoveryRoute
+  '/reports': typeof WorkspaceReportsRoute
+  '/settings': typeof WorkspaceSettingsRoute
+  '/p/$serial': typeof PSerialRoute
   '/batches/$batchId': typeof WorkspaceBatchesBatchIdRoute
   '/devices/$deviceId': typeof WorkspaceDevicesDeviceIdRoute
   '/batches/': typeof WorkspaceBatchesIndexRoute
   '/devices/': typeof WorkspaceDevicesIndexRoute
 }
 export interface FileRoutesByTo {
+  '/assurance': typeof WorkspaceAssuranceRoute
+  '/custody': typeof WorkspaceCustodyRoute
+  '/handlers': typeof WorkspaceHandlersRoute
   '/intake': typeof WorkspaceIntakeRoute
+  '/recovery': typeof WorkspaceRecoveryRoute
+  '/reports': typeof WorkspaceReportsRoute
+  '/settings': typeof WorkspaceSettingsRoute
+  '/p/$serial': typeof PSerialRoute
   '/': typeof WorkspaceIndexRoute
   '/batches/$batchId': typeof WorkspaceBatchesBatchIdRoute
   '/devices/$deviceId': typeof WorkspaceDevicesDeviceIdRoute
@@ -72,7 +128,14 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_workspace': typeof WorkspaceRouteWithChildren
+  '/_workspace/assurance': typeof WorkspaceAssuranceRoute
+  '/_workspace/custody': typeof WorkspaceCustodyRoute
+  '/_workspace/handlers': typeof WorkspaceHandlersRoute
   '/_workspace/intake': typeof WorkspaceIntakeRoute
+  '/_workspace/recovery': typeof WorkspaceRecoveryRoute
+  '/_workspace/reports': typeof WorkspaceReportsRoute
+  '/_workspace/settings': typeof WorkspaceSettingsRoute
+  '/p/$serial': typeof PSerialRoute
   '/_workspace/': typeof WorkspaceIndexRoute
   '/_workspace/batches/$batchId': typeof WorkspaceBatchesBatchIdRoute
   '/_workspace/devices/$deviceId': typeof WorkspaceDevicesDeviceIdRoute
@@ -83,14 +146,28 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/assurance'
+    | '/custody'
+    | '/handlers'
     | '/intake'
+    | '/recovery'
+    | '/reports'
+    | '/settings'
+    | '/p/$serial'
     | '/batches/$batchId'
     | '/devices/$deviceId'
     | '/batches/'
     | '/devices/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/assurance'
+    | '/custody'
+    | '/handlers'
     | '/intake'
+    | '/recovery'
+    | '/reports'
+    | '/settings'
+    | '/p/$serial'
     | '/'
     | '/batches/$batchId'
     | '/devices/$deviceId'
@@ -99,7 +176,14 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_workspace'
+    | '/_workspace/assurance'
+    | '/_workspace/custody'
+    | '/_workspace/handlers'
     | '/_workspace/intake'
+    | '/_workspace/recovery'
+    | '/_workspace/reports'
+    | '/_workspace/settings'
+    | '/p/$serial'
     | '/_workspace/'
     | '/_workspace/batches/$batchId'
     | '/_workspace/devices/$deviceId'
@@ -109,6 +193,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   WorkspaceRoute: typeof WorkspaceRouteWithChildren
+  PSerialRoute: typeof PSerialRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -127,12 +212,61 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkspaceIndexRouteImport
       parentRoute: typeof WorkspaceRoute
     }
+    '/_workspace/assurance': {
+      id: '/_workspace/assurance'
+      path: '/assurance'
+      fullPath: '/assurance'
+      preLoaderRoute: typeof WorkspaceAssuranceRouteImport
+      parentRoute: typeof WorkspaceRoute
+    }
+    '/_workspace/custody': {
+      id: '/_workspace/custody'
+      path: '/custody'
+      fullPath: '/custody'
+      preLoaderRoute: typeof WorkspaceCustodyRouteImport
+      parentRoute: typeof WorkspaceRoute
+    }
+    '/_workspace/handlers': {
+      id: '/_workspace/handlers'
+      path: '/handlers'
+      fullPath: '/handlers'
+      preLoaderRoute: typeof WorkspaceHandlersRouteImport
+      parentRoute: typeof WorkspaceRoute
+    }
     '/_workspace/intake': {
       id: '/_workspace/intake'
       path: '/intake'
       fullPath: '/intake'
       preLoaderRoute: typeof WorkspaceIntakeRouteImport
       parentRoute: typeof WorkspaceRoute
+    }
+    '/_workspace/recovery': {
+      id: '/_workspace/recovery'
+      path: '/recovery'
+      fullPath: '/recovery'
+      preLoaderRoute: typeof WorkspaceRecoveryRouteImport
+      parentRoute: typeof WorkspaceRoute
+    }
+    '/_workspace/reports': {
+      id: '/_workspace/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof WorkspaceReportsRouteImport
+      parentRoute: typeof WorkspaceRoute
+    }
+    '/_workspace/settings': {
+      id: '/_workspace/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof WorkspaceSettingsRouteImport
+      parentRoute: typeof WorkspaceRoute
+    }
+    '/p/$serial': {
+      id: '/p/$serial'
+      path: '/p/$serial'
+      fullPath: '/p/$serial'
+      preLoaderRoute: typeof PSerialRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_workspace/batches/': {
       id: '/_workspace/batches/'
@@ -166,7 +300,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface WorkspaceRouteChildren {
+  WorkspaceAssuranceRoute: typeof WorkspaceAssuranceRoute
+  WorkspaceCustodyRoute: typeof WorkspaceCustodyRoute
+  WorkspaceHandlersRoute: typeof WorkspaceHandlersRoute
   WorkspaceIntakeRoute: typeof WorkspaceIntakeRoute
+  WorkspaceRecoveryRoute: typeof WorkspaceRecoveryRoute
+  WorkspaceReportsRoute: typeof WorkspaceReportsRoute
+  WorkspaceSettingsRoute: typeof WorkspaceSettingsRoute
   WorkspaceIndexRoute: typeof WorkspaceIndexRoute
   WorkspaceBatchesBatchIdRoute: typeof WorkspaceBatchesBatchIdRoute
   WorkspaceDevicesDeviceIdRoute: typeof WorkspaceDevicesDeviceIdRoute
@@ -175,7 +315,13 @@ interface WorkspaceRouteChildren {
 }
 
 const WorkspaceRouteChildren: WorkspaceRouteChildren = {
+  WorkspaceAssuranceRoute: WorkspaceAssuranceRoute,
+  WorkspaceCustodyRoute: WorkspaceCustodyRoute,
+  WorkspaceHandlersRoute: WorkspaceHandlersRoute,
   WorkspaceIntakeRoute: WorkspaceIntakeRoute,
+  WorkspaceRecoveryRoute: WorkspaceRecoveryRoute,
+  WorkspaceReportsRoute: WorkspaceReportsRoute,
+  WorkspaceSettingsRoute: WorkspaceSettingsRoute,
   WorkspaceIndexRoute: WorkspaceIndexRoute,
   WorkspaceBatchesBatchIdRoute: WorkspaceBatchesBatchIdRoute,
   WorkspaceDevicesDeviceIdRoute: WorkspaceDevicesDeviceIdRoute,
@@ -189,6 +335,7 @@ const WorkspaceRouteWithChildren = WorkspaceRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   WorkspaceRoute: WorkspaceRouteWithChildren,
+  PSerialRoute: PSerialRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

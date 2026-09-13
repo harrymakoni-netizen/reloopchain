@@ -223,7 +223,7 @@ function Overview() {
         />
       </Panel>
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]">
+      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]">
         <Panel>
           <PanelHeader
             title="Batches"
@@ -262,7 +262,7 @@ function Overview() {
                         <Link
                           to="/batches/$batchId"
                           params={{ batchId: b.id }}
-                          className="font-mono text-[0.75rem] font-medium text-forest underline-offset-2 hover:underline"
+                          className="whitespace-nowrap font-mono text-[0.75rem] font-medium text-forest underline-offset-2 hover:underline"
                         >
                           {b.ref}
                         </Link>

@@ -27,6 +27,7 @@ import {
   storageResolved,
   usd,
 } from "@/lib/reloop/format";
+import { fileToEvidenceDataUrl } from "@/lib/reloop/image";
 import { ESTIMATE_DISCLAIMER, estimateForMass } from "@/lib/reloop/recovery";
 import { useReloop } from "@/lib/reloop/store";
 import type { Disposition } from "@/lib/reloop/types";
@@ -401,24 +402,72 @@ function DevicePassport() {
             </Panel>
 
             <Panel>
-              <PanelHeader title="Evidence photos" description="Captured at intake." />
+              <PanelHeader
+                title="Evidence photographs"
+                description="Attached at intake or later. Stored with the item record in this browser."
+              />
               <ul className="grid grid-cols-2 gap-3 px-5 py-4">
                 {device.photos.map((p) => (
-                  <li
-                    key={p.id}
-                    className="rounded-sm border border-dashed border-border bg-muted px-3 py-6 text-center"
-                  >
-                    <p className="text-[0.6875rem] font-medium">{p.label}</p>
-                    <p className="mt-1 text-[0.625rem] text-muted-foreground">
-                      captured {shortDate(p.capturedAt)}
-                    </p>
+                  <li key={p.id} className="rounded-sm border border-border">
+                    {p.dataUrl ? (
+                      <img
+                        src={p.dataUrl}
+                        alt={`Evidence photograph: ${p.label}`}
+                        className="h-24 w-full rounded-t-sm object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-24 items-center justify-center rounded-t-sm border-b border-dashed border-border bg-muted px-2 text-center text-[0.625rem] text-muted-foreground">
+                        Entry recorded — no image file attached
+                      </div>
+                    )}
+                    <div className="px-2 py-2">
+                      <p className="text-[0.6875rem] font-medium">{p.label}</p>
+                      <p className="text-[0.625rem] text-muted-foreground">
+                        captured {shortDate(p.capturedAt)}
+                      </p>
+                    </div>
                   </li>
                 ))}
               </ul>
-              <p className="px-5 pb-4 text-[0.6875rem] text-muted-foreground">
-                Photo files are not stored in this demonstration; only the evidence entries
-                are held.
-              </p>
+              <div className="flex flex-wrap items-center gap-2 px-5 pb-4">
+                <label htmlFor="add-photo" className={`${btnGhost} cursor-pointer`}>
+                  Attach photograph
+                </label>
+                <input
+                  id="add-photo"
+                  type="file"
+                  accept="image/*"
+                  className="sr-only"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    e.target.value = "";
+                    if (!file || !device) return;
+                    try {
+                      const dataUrl = await fileToEvidenceDataUrl(file);
+                      updateDevice(device.id, {
+                        photos: [
+                          ...device.photos,
+                          {
+                            id: `pho-${Date.now()}`,
+                            label: "Operator photograph",
+                            capturedAt: state.demoToday,
+                            dataUrl,
+                          },
+                        ],
+                      });
+                      appendEvent(device.id, {
+                        at: state.demoToday,
+                        type: "note",
+                        actor: "Demo operator",
+                        note: "Evidence photograph attached to the item record.",
+                      });
+                      toast.success("Photograph attached.");
+                    } catch {
+                      toast.error("That file could not be read as an image.");
+                    }
+                  }}
+                />
+              </div>
             </Panel>
 
             <Panel>

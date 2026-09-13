@@ -57,6 +57,8 @@ export interface EvidencePhoto {
   id: string;
   label: string;
   capturedAt: string;
+  /** Downscaled JPEG data URL when an operator attached a photo. */
+  dataUrl: string | null;
 }
 
 export type EventType =
