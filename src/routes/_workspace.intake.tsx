@@ -14,6 +14,7 @@ import {
 import { QrCode } from "@/components/reloop/qr";
 import { btnGhost, btnPrimary, inputCls, selectCls } from "@/components/reloop/controls";
 import { HAZARD_LABEL, kg } from "@/lib/reloop/format";
+import { fileToEvidenceDataUrl } from "@/lib/reloop/image";
 import { FACILITY_ID, useReloop, uid } from "@/lib/reloop/store";
 import type {
   DeviceCategory,
@@ -62,6 +63,12 @@ const PHOTO_SLOTS = [
   "Hazard or damage detail",
 ];
 
+interface PhotoDraft {
+  key: string;
+  label: string;
+  dataUrl: string;
+}
+
 interface StorageRow {
   key: string;
   serial: string;
@@ -86,7 +93,7 @@ function IntakePage() {
   const [condition, setCondition] = useState("");
   const [storage, setStorage] = useState<StorageRow[]>([]);
   const [hazards, setHazards] = useState<HazardFlag[]>([]);
-  const [photos, setPhotos] = useState<string[]>([PHOTO_SLOTS[0]!, PHOTO_SLOTS[1]!]);
+  const [photos, setPhotos] = useState<PhotoDraft[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const massValue = Number.parseFloat(mass);
@@ -114,7 +121,8 @@ function IntakePage() {
       if (test === "untested") e["test"] = "Record the functional test outcome before continuing.";
     }
     if (target > 3) {
-      if (photos.length === 0) e["photos"] = "At least one evidence photo entry is required.";
+      if (photos.length === 0)
+        e["photos"] = "Attach at least one evidence photograph.";
     }
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -156,7 +164,12 @@ function IntakePage() {
         record: null,
       })),
       hazardFlags: hazards,
-      photos: photos.map((label) => ({ id: uid("pho"), label, capturedAt: now })),
+      photos: photos.map((p) => ({
+        id: uid("pho"),
+        label: p.label,
+        capturedAt: now,
+        dataUrl: p.dataUrl,
+      })),
       custodianId: FACILITY_ID,
       disposition: "awaiting",
       recoveredFractions: [],
@@ -195,7 +208,7 @@ function IntakePage() {
     setCondition("");
     setStorage([]);
     setHazards([]);
-    setPhotos([PHOTO_SLOTS[0]!, PHOTO_SLOTS[1]!]);
+    setPhotos([]);
     setErrors({});
   }
 
@@ -691,7 +704,12 @@ function IntakePage() {
                       ? "None"
                       : hazards.map((h) => HAZARD_LABEL[h]).join(", "),
                   ],
-                  ["Evidence", photos.join(", ") || "None"],
+                  [
+                    "Evidence",
+                    photos.length === 0
+                      ? "None attached"
+                      : photos.map((p) => p.label).join(", "),
+                  ],
                 ].map(([k, v]) => (
                   <div
                     key={k}
