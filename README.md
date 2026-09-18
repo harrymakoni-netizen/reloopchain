@@ -1,37 +1,66 @@
-# ReLoop Chain
+# ReLoop
 
-Build ReLoop by HJM Technologies: a premium, substantial Zimbabwean institutional e-waste recovery and chain-of-custody platform for a POTRAZ 2026 Innovation Expo demonstration. Build the working app now, not a plan or generic landing page. User supplied logo is attached: preserve its artwork, render it crisply with CSS container clipping/object positioning to handle huge white margins without stretching. Brand deep ink #142D32, forest #086653, restrained fresh green, warm off-white #F6F7F3, fine borders. Bespoke enterprise product feel: excellent typography, tight operational tables, spacious composition, subtle status colours, restrained radii, almost no gradients or gratuitous icons. Avoid AI-template hero sections, excessive cards, emoji, fake testimonials. Desktop sidebar, slim workspace header, responsive mobile navigation. First screen a beautifully art-directed real operations overview with a strong headline "Every device. Accounted for.", compact overview metrics, broad batch table, attention queue and a restrained material-flow visualization. Consistent rich screens.
+**Every device. Accounted for.**
 
-Source proposal interpreted as product requirements:
-Core is institutional disposal evidence, NOT consumer recycling rewards. Each item has serial ID, category, measured kg, functional test outcome, origin institution/batch/asset tag, storage-media serials/types, hazard flags, evidence photos, current custodian, events. Batch metrics derive from items.
-Implement routes/screens: Overview; Batches (create, details, search/filter, import asset register CSV, reconciliation matched/unmatched/missing); Devices (search/filter and detailed passport); Intake (polished multi-step validated form, photos evidence only, mass >0, storage rows, condition from functional test; save and generate actual scannable QR/print label); Recovery (composition ranges and price/recovery efficiency assumptions, version/date, hazard overview); Custody (initiate and accept transfer, item-linked event timelines); Data assurance (storage-device sanitisation or physical destruction records: serial, method, operator, date, result, standard reference if actually supplied, evidence and physical-destruction witness); Handler network (profiles, verification tiers, licence scope/expiry, incoming work); Reports (batch disposition, CSV download, print-ready report and certificate specimen); Settings/help with guided demo and reset sample data.
-QR must resolve a minimal public passport route with no institutional private identifiers, storage serials, personal operator data, or device-level precious-metal figures. Internal passport detailed with status AND prominent last verified event date/age. Unconfirmed disposition always awaiting disposition; stale events obvious. No pretend tracking beyond verified network.
-Custody may go only to verified parties with current authorisation and appropriate hazard scope. Block expired and unverified handlers and explain why. Collector tiers may not process or receive hazardous items. Accepted events append-only within demo; never imply client-side demo history is secure immutable audit. Demo role switch labelled clearly, not fake authentication.
-Data destruction records record work performed externally; app does not erase drives. Block certificate specimen generation if any identified storage device unresolved or verification failed, require witness for physical destruction. All certificates visibly "DEMONSTRATION SPECIMEN — not evidence of actual destruction". Avoid asserting regulatory approval, certification, partnerships or legal compliance.
-Recovery estimates: proposal contains framework only, no validated composition data. Do not invent scholarly sources or current prices. Provide clearly marked illustrative demo assumptions with low/high fractions, efficiency, sample price date, table version, mass-based calculation. "Illustrative estimate — not an assay or quotation"; detailed basis drawer. Unsupported categories show reference unavailable. Precious-metal estimation only batch-level authenticated-style demo view, never individual public passports. Separate measured intake mass, confirmed controlled-recovery mass, actual recorded recovered fractions and estimated mass. Show confirmed dispositions / total transparently; no fabricated CO2 equivalences.
-Use coherent seeded fictional institutional batches in Harare/Bulawayo with about 24 devices across 3 batches, clearly scoped "Expo demo · sample data" in workspace header and export watermarks. Include functioning, failed, awaiting, confirmed and stale examples, an expired handler and hazardous routing rejection demonstration. Sample institutions and handlers explicitly fictional, not real agencies/partners. No real licence assertions. Accurate rollups and internally consistent dates. Demo data persists in local storage with reset, core workflows functional offline after page load; state honestly that cross-device auth/backend is not enabled if not built. Prefer a reliable complete demo over pretend production security.
-Include a concise guided expo walkthrough showing register 2.14kg laptop -> passport -> illustrative estimate -> valid/blocked transfer -> destruction evidence -> specimen -> report -> stale record. Accessible keyboard interactions, labelled controls, focus rings, table horizontal scroll mobile, empty/error states, no dead buttons. Search actually works. Export actually downloads. Help briefly describes institutional service-fee model without invented pricing and alignment to circular economy, digital trust and inclusive collector participation; no claim selected/endorsed by POTRAZ. Event context from supplied brief: 29 September–2 October 2026, ZIEC Bulawayo; use sparingly.
-Please implement fully, check build/type correctness and exercise main flows. The premium feel is a priority alongside honest functionality.
+ReLoop is a chain-of-custody platform for institutional e-waste in Zimbabwe. It gives every retired device — a laptop, a server, a monitor — a digital identity the moment it's registered, and tracks that identity through data destruction, custody transfer, and final disposition, so an institution can actually prove what happened to equipment that used to just disappear.
 
-This project was built with [Lovable](https://lovable.dev).
+Built by HJM Technologies for the 2026 POTRAZ Innovation Expo and Conference (29 September – 2 October, ZIEC Bulawayo).
 
-**Live app**: https://reloopchain.lovable.app
+**Live demo:** [reloopchain.lovable.app](https://reloopchain.lovable.app)
 
-## Build with Lovable
+---
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/8f648bb4-94a2-4ab1-866e-c708a9fbf84e).
+## The problem
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+Most institutional e-waste in Zimbabwe leaves the building with little more than a handwritten gate pass, if that. Hard drives go unlogged, so nobody can prove the data on them was destroyed. Hazardous components get mixed with general waste. Functional equipment gets crushed instead of reused. And at the end of it, no institution can show a board, an auditor, or a regulator what actually happened to a specific device.
+
+ReLoop replaces that gap with an item-level, evidence-based record — not a bulk disposal log, a chain of custody for each device.
+
+## What it does
+
+- **Intake** — register a device with its measured mass, functional test result, storage-media serials, hazard flags, and photographic evidence. Generates a scannable QR label on the spot.
+- **Passport** — every device has an internal record for staff and a minimal public passport, reached by scanning its QR code, that shows status and last verified event only — no institution name, no serials, no operator identity.
+- **Custody transfer** — a device can only move to a verified handler with current authorisation and the correct hazard scope. Transfers to expired, unverified, or wrongly-scoped handlers are blocked automatically, with the reason shown.
+- **Data assurance** — sanitisation and physical-destruction records capture method, operator, date, and result. Physical destruction requires a named witness. A certificate specimen won't generate until every storage device on an item is resolved.
+- **Recovery estimates** — mass-based composition ranges with a stated recovery efficiency, price date, and assumptions-table version, clearly marked as illustrative. Precious-metal figures appear only in aggregated, authenticated views — never on an individual public passport.
+- **Handler network** — verification tiers, licence scope, expiry, and incoming work for each registered handler.
+- **Reports** — batch disposition summaries, CSV export, and a print-ready report.
+
+## Honest limitations
+
+This is a working expo demonstration, not a production system, and it doesn't pretend otherwise:
+
+- All data lives in browser local storage. There is no backend, no authentication, and no cross-device sync.
+- The event history is append-only within the demo session — it is not a tamper-evident or cryptographically secured audit log.
+- Recovery estimates are illustrative planning assumptions, not laboratory assays or price quotations.
+- Every certificate is watermarked **"DEMONSTRATION SPECIMEN — not evidence of actual destruction."**
+- Sample institutions, handlers, and batches are explicitly fictional. No real licence, partnership, or regulatory endorsement is claimed or implied anywhere in the app.
+
+## Try it
+
+The guided walkthrough in the app covers the full flow: register a 2.14 kg laptop → view its passport → check its illustrative recovery estimate → attempt a valid transfer and a blocked one → record destruction evidence → generate a specimen certificate → export a report → see how a stale, unconfirmed record is surfaced honestly rather than hidden.
+
+Seeded demo data (~24 devices across 3 batches, fictional Harare and Bulawayo institutions) can be reset at any time from Settings.
+
+## Tech stack
+
+React, TypeScript, Tailwind CSS, and shadcn/ui — built and deployed with [Lovable](https://lovable.dev).
 
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+Continue developing in the [Lovable editor](https://lovable.dev/projects/8f648bb4-94a2-4ab1-866e-c708a9fbf84e), or work locally:
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+git clone <repo-url>
+cd reloopchain
+npm install
 npm run dev
 ```
+
+Requires Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating) if you don't have them.
+
+Changes made in the Lovable editor sync automatically to this repository, and pushes to `main` sync back into Lovable.
+
+---
+
+*Submitted to the 2026 POTRAZ Innovation Expo and Conference — Tertiary Level, E-Waste Management sector.*
